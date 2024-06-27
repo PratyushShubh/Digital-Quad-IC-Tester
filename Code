@@ -1,0 +1,109 @@
+const int gate1_input1 = 13;
+const int gate1_input2 = 12;
+const int gate1_output = 11;
+const int gate2_input1 = 10;
+const int gate2_input2 = 9;
+const int gate2_output = 8;
+const int gate3_input1 = 5;
+const int gate3_input2 = 6;
+const int gate3_output = 7;
+const int gate4_input1 = 2;
+const int gate4_input2 = 3;
+const int gate4_output = 4;
+int index = 0;
+const int arraySize = 4;
+int values[arraySize];
+
+void setup() {
+  Serial.begin(9600);
+  // Initialize the pins
+  pinMode(gate1_input1, OUTPUT);
+  pinMode(gate1_input2, OUTPUT);
+  pinMode(gate1_output, INPUT);
+  pinMode(gate2_input1, OUTPUT);
+  pinMode(gate2_input2, OUTPUT);
+  pinMode(gate2_output, INPUT);
+  pinMode(gate3_input1, OUTPUT);
+  pinMode(gate3_input2, OUTPUT);
+  pinMode(gate3_output, INPUT);
+  pinMode(gate4_input1, OUTPUT);
+  pinMode(gate4_input2, OUTPUT);
+  pinMode(gate4_output, INPUT);
+}
+
+void loop() {
+  check_gate(gate1_input1, gate1_input2, gate1_output);
+  gate_type();
+  check_gate(gate2_input1, gate2_input2, gate2_output);
+  gate_type();
+  check_gate(gate3_input1, gate3_input2, gate3_output);
+  gate_type();
+  check_gate(gate4_input1, gate4_input2, gate4_output);
+  gate_type();
+}
+
+void check_gate(int input1, int input2, int output) {
+  digitalWrite(input1, LOW);
+  digitalWrite(input2, LOW);
+  values[index] = digitalRead(output);
+  delay(1000);
+  index++;
+  
+  digitalWrite(input1, LOW);
+  digitalWrite(input2, HIGH);
+  values[index] = digitalRead(output);
+  delay(1000);
+  index++;
+  
+  digitalWrite(input1, HIGH);
+  digitalWrite(input2, LOW);
+  values[index] = digitalRead(output);
+  delay(1000);
+  index++;
+  
+  digitalWrite(input1, HIGH);
+  digitalWrite(input2, HIGH);
+  values[index] = digitalRead(output);
+  delay(1000);
+  index++;
+}
+
+void gate_type() {
+  if (values[0] == 1 && values[1] == 1 && values[2] == 1 && values[3] == 0) {
+    Serial.println("It's a working NAND IC");
+  } 
+  if (values[0] == 0 && values[1] == 0 && values[2] == 0 && values[3] == 1) {
+    Serial.println("It's a working AND IC");
+  } 
+  if (values[0] == 0 && values[1] == 1 && values[2] == 1 && values[3] == 1) {
+    Serial.println("It's a working OR IC");
+  } 
+  if (values[0] == 1 && values[1] == 0 && values[2] == 0 && values[3] == 0) {
+    Serial.println("It's a working NOR IC");
+  } 
+  if (values[0] == 0 && values[1] == 1 && values[2] == 1 && values[3] == 0) {
+    Serial.println("It's a working XOR IC");
+  } 
+  if (values[0] == 1 && values[1] == 0 && values[2] == 0 && values[3] == 1) {
+    Serial.println("It's a working XNOR IC");
+  }   
+  
+  
+  // Reset the index for the next gate
+  index = 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
